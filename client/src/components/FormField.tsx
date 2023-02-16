@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { Dispatch, FormEvent, SetStateAction } from 'react'
 
 interface FormFieldProps {
@@ -7,6 +8,7 @@ interface FormFieldProps {
 	placeholder: string
 	value: string
 	setValue: Dispatch<SetStateAction<string>>
+	random?: boolean
 }
 
 const FormField = ({
@@ -16,22 +18,31 @@ const FormField = ({
 	placeholder,
 	value,
 	setValue,
+	random = false,
 }: FormFieldProps) => {
 	const handleChange = (e: FormEvent) => {
 		e.preventDefault()
 		let element = e.target as HTMLInputElement
 		setValue(element.value)
 	}
+	const handleRandom = () => {}
 
 	return (
 		<div>
-			<div className="flex items-center gap-2 mb-2">
-				<label
-					htmlFor={name}
-					className="block text-sm font-medium text-gray-900"
-				>
+			<div className="flex items-center gap-5 mb-2">
+				<label htmlFor={name} className="block font-medium text-gray-900">
 					{labelName}
 				</label>
+				{random ? (
+					<motion.button
+						whileTap={{ translateY: '2px' }}
+						type="button"
+						className="bg-[#EcECF1] text-black px-4 py-0.5 rounded-md text-sm"
+						onClick={handleRandom}
+					>
+						Random Prompt
+					</motion.button>
+				) : null}
 			</div>
 			<input
 				type={inputType}

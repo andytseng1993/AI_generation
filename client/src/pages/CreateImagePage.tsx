@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import FormField from '../components/FormField'
-import { preview } from '../assets'
+import { logo, preview } from '../assets'
+import PhotoSize from '../components/PhotoSize'
 
 const CreateImagePage = () => {
 	const [name, setName] = useState('')
 	const [prompt, setPrompt] = useState('')
 	const [photo, setPhoto] = useState('')
 	const [size, setSize] = useState('256x256')
+	const handleRandomPrompts = () => {}
 	const handleSubmit = () => {}
 
 	return (
@@ -18,7 +20,7 @@ const CreateImagePage = () => {
 					community
 				</p>
 			</div>
-			<form className="mt-10 max-w-3xl" onSubmit={handleSubmit}>
+			<form className="m-auto mt-10 max-w-3xl" onSubmit={handleSubmit}>
 				<div className="flex flex-col gap-5">
 					<FormField
 						name="name"
@@ -35,24 +37,23 @@ const CreateImagePage = () => {
 						placeholder="An Impressionist oil painting of sunflowers in a purple vase…"
 						value={prompt}
 						setValue={setPrompt}
+						random={true}
 					/>
 					<div>
-						256x256, 512x512, or 1024x1024 pixels
-						<label>Size:</label>
-						<input></input>
+						<PhotoSize size={size} setSize={setSize} />
 					</div>
 					<div>
 						{photo ? (
 							<img
 								src={photo}
 								alt={prompt}
-								className="w-full h-full object-contain"
+								className="min-w-[300px] w-full h-full object-contain m-auto p-2 border rounded border-slate-300 "
 							/>
 						) : (
 							<img
 								src={preview}
 								alt={'preview'}
-								className="w-7/12 h-7/12 object-contain opacity-40"
+								className="min-w-[300px] w-7/12 h-7/12 object-contain opacity-40 m-auto p-2 border rounded border-slate-300"
 							/>
 						)}
 					</div>
