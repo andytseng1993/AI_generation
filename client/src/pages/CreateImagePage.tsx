@@ -2,13 +2,21 @@ import { useState } from 'react'
 import FormField from '../components/FormField'
 import { logo, preview } from '../assets'
 import PhotoSize from '../components/PhotoSize'
+import Prompts from '../constant/Prompts'
 
 const CreateImagePage = () => {
 	const [name, setName] = useState('')
 	const [prompt, setPrompt] = useState('')
 	const [photo, setPhoto] = useState('')
 	const [size, setSize] = useState('256x256')
-	const handleRandomPrompts = () => {}
+	const handleRandomPrompts = () => {
+		const randomIndex = Math.floor(Math.random() * Prompts.length)
+		const randomPrompt = Prompts[randomIndex]
+		if (prompt === randomPrompt) {
+			handleRandomPrompts()
+		}
+		return setPrompt(randomPrompt)
+	}
 	const handleSubmit = () => {}
 
 	return (
@@ -38,6 +46,7 @@ const CreateImagePage = () => {
 						value={prompt}
 						setValue={setPrompt}
 						random={true}
+						handleRandomPrompts={handleRandomPrompts}
 					/>
 					<div>
 						<PhotoSize size={size} setSize={setSize} />

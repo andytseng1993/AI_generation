@@ -9,6 +9,7 @@ interface FormFieldProps {
 	value: string
 	setValue: Dispatch<SetStateAction<string>>
 	random?: boolean
+	handleRandomPrompts?: () => void
 }
 
 const FormField = ({
@@ -19,13 +20,13 @@ const FormField = ({
 	value,
 	setValue,
 	random = false,
+	handleRandomPrompts,
 }: FormFieldProps) => {
 	const handleChange = (e: FormEvent) => {
 		e.preventDefault()
 		let element = e.target as HTMLInputElement
 		setValue(element.value)
 	}
-	const handleRandom = () => {}
 
 	return (
 		<div>
@@ -38,7 +39,7 @@ const FormField = ({
 						whileTap={{ translateY: '2px' }}
 						type="button"
 						className="bg-[#EcECF1] text-black px-4 py-0.5 rounded-md text-sm"
-						onClick={handleRandom}
+						onClick={handleRandomPrompts}
 					>
 						Random Prompt
 					</motion.button>
