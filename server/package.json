@@ -5,16 +5,19 @@
   "main": "server.ts",
   "scripts": {
     "server": "nodemon server.ts",
-    "client": "npm run dev --prefix ./client",
+    "client": "npm run dev --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Andy Tseng",
   "license": "MIT",
+  "Type": "module",
   "devDependencies": {
     "@prisma/client": "^4.10.1",
+    "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/node": "^18.13.0",
     "concurrently": "^7.6.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "nodemon": "^2.0.20",
