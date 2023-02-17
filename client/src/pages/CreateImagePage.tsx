@@ -3,13 +3,30 @@ import FormField from '../components/FormField'
 import { logo, preview } from '../assets'
 import PhotoSize from '../components/PhotoSize'
 import Prompts from '../constant/Prompts'
+import axios from 'axios'
 import { motion } from 'framer-motion'
+import { useMutation } from '@tanstack/react-query'
+
+interface imageData {
+	prompt: string
+	size: string
+}
 
 const CreateImagePage = () => {
 	const [name, setName] = useState('')
 	const [prompt, setPrompt] = useState('')
 	const [photo, setPhoto] = useState('')
 	const [size, setSize] = useState('256x256')
+	const mutation = useMutation({
+		mutationFn: async (imageData: imageData) => {
+			const { data } = await axios.post('/api/dalle', imageData)
+			return data
+		},
+		onSuccess: (data) => {
+			setPhoto(`data:image/jpeg;base64,${data.photo}`)
+		},
+	})
+
 	const handleRandomPrompts = () => {
 		const randomIndex = Math.floor(Math.random() * Prompts.length)
 		const randomPrompt = Prompts[randomIndex]
@@ -19,7 +36,14 @@ const CreateImagePage = () => {
 		return setPrompt(randomPrompt)
 	}
 	const handleSubmit = () => {}
-	const generateImage = () => {}
+	const generateImage = () => {
+		if (!prompt) return
+		const imageData = {
+			prompt: prompt,
+			size: size,
+		}
+		mutation.mutate(imageData)
+	}
 
 	return (
 		<section className="max-w-7xl mx-auto">

@@ -10,8 +10,10 @@ import {
 import CreateImagePage from './pages/CreateImagePage'
 import HomePage from './pages/HomePage'
 import NavBar from './pages/NavBar'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 function App() {
+	const queryClient = new QueryClient()
 	const router = createBrowserRouter(
 		createRoutesFromElements(
 			<Route path="/" element={<NavBar />}>
@@ -23,7 +25,9 @@ function App() {
 	)
 	return (
 		<>
-			<RouterProvider router={router} />
+			<QueryClientProvider client={queryClient}>
+				<RouterProvider router={router} />
+			</QueryClientProvider>
 		</>
 	)
 }
