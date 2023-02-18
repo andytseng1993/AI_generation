@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import FormField from '../components/FormField'
 import { logo, preview } from '../assets'
 import PhotoSize from '../components/PhotoSize'
@@ -11,12 +11,19 @@ interface imageData {
 	prompt: string
 	size: string
 }
+interface formData {
+	name: string
+	prompt: string
+	image: string
+}
 
 const CreateImagePage = () => {
 	const [name, setName] = useState('')
 	const [prompt, setPrompt] = useState('')
 	const [photo, setPhoto] = useState('')
 	const [size, setSize] = useState('256x256')
+	const [warning, setWarning] = useState(false)
+
 	const mutation = useMutation({
 		mutationFn: async (imageData: imageData) => {
 			const { data } = await axios.post('/api/dalle', imageData)
@@ -24,6 +31,16 @@ const CreateImagePage = () => {
 		},
 		onSuccess: (data) => {
 			setPhoto(`data:image/jpeg;base64,${data.photo}`)
+		},
+	})
+
+	const mutationShare = useMutation({
+		mutationFn: async (formData: formData) => {
+			const { data } = await axios.post('/api/posts', formData)
+			return data
+		},
+		onSuccess: (data) => {
+			// setPhoto(`data:image/jpeg;base64,${data.photo}`)
 		},
 	})
 
@@ -35,9 +52,25 @@ const CreateImagePage = () => {
 		}
 		return setPrompt(randomPrompt)
 	}
-	const handleSubmit = () => {}
+	const handleSubmit = async (e: FormEvent) => {
+		e.preventDefault()
+		if (
+			mutation.data.photo === '' ||
+			name.trim() === '' ||
+			prompt.trim() === ''
+		)
+			return
+		const formData = {
+			name: name,
+			prompt: prompt,
+			image: mutation.data.photo,
+		}
+		mutationShare.mutate(formData)
+	}
+
 	const generateImage = () => {
-		if (!prompt) return
+		if (prompt.trim() === '') return setWarning(true)
+		setWarning(false)
 		const imageData = {
 			prompt: prompt,
 			size: size,
@@ -82,7 +115,7 @@ const CreateImagePage = () => {
 							<img
 								src={photo}
 								alt={prompt}
-								className="min-w-[250px] w-full h-full object-contain m-auto p-2 border rounded border-slate-300 my-2"
+								className="min-w-[250px] w-7/12 h-7/12 object-contain m-auto p-2 border rounded border-slate-300 my-2"
 							/>
 						) : (
 							<img
@@ -94,6 +127,11 @@ const CreateImagePage = () => {
 					</div>
 				</div>
 				<div className="mt-5 flex flex-col gap-5">
+					{warning ? (
+						<small className="-mt-4 -mb-3 ml-5 text-red-500">
+							Please enter some prompt!
+						</small>
+					) : null}
 					<motion.button
 						whileHover={{
 							backgroundColor: 'rgb(17, 83, 41)',
@@ -104,7 +142,11 @@ const CreateImagePage = () => {
 						onClick={generateImage}
 						className=" text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
 					>
-						{'Generate Image'}
+						{mutation.isLoading
+							? 'Generating...'
+							: mutation.isError
+							? 'An error occurred'
+							: 'Generate Image'}
 					</motion.button>
 					<div>
 						<p className=" text-[#666e75] text-[14px]">
@@ -117,10 +159,15 @@ const CreateImagePage = () => {
 								transition: { duration: 0.2 },
 							}}
 							whileTap={{ scale: 0.99 }}
+							disabled={photo.trim() === '' ? true : false}
 							type="submit"
 							className="mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full  px-5 py-2.5 text-center"
 						>
-							{'Share with the Community'}
+							{mutationShare.isLoading
+								? 'Sharing...'
+								: mutationShare.isError
+								? 'Server error occurred'
+								: 'Share with the Community'}
 						</motion.button>
 					</div>
 				</div>

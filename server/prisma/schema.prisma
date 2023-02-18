@@ -15,5 +15,5 @@ model Post {
   createdAt DateTime @default(now())
   name      String
   prompt    String
-  photo     String
+  image     Bytes
 }

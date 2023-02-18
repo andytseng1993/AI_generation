@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
+import { Buffer } from 'buffer'
 
 const prisma = new PrismaClient()
 const router = express.Router()
@@ -17,7 +18,7 @@ router.get('/', async (req, res) => {
         id: true,
         name: true,
         prompt: true,
-        photo: true
+        image: true
       }
     })
     return res.status(200).json(posts)
@@ -30,18 +31,18 @@ router.get('/', async (req, res) => {
 //@desc return new post
 //@access Public
 router.post('/', async (req, res) => {
-  const { name, prompt, photo } = req.body
+  const { name, prompt, image } = req.body
   try {
     await prisma.post.create({
       data: {
         name,
         prompt,
-        photo
+        image: Buffer.from(image, 'base64')
       }
     })
     return res.status(201).json({ success: true })
   } catch (error) {
-    return res.status(404).json({ success: false })
+    return res.status(404).json({ err: error })
   }
 })
 
