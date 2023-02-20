@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Card from '../components/Card'
 import FormField from '../components/FormField'
 
@@ -21,7 +21,18 @@ const HomePage = () => {
 			return data
 		},
 	})
-	console.log(data)
+	const imageFilter = useMemo(() => {
+		return data?.filter((post: Post) => {
+			return (
+				searchText.trim() === '' ||
+				post.prompt
+					.trim()
+					.toUpperCase()
+					.includes(searchText.trim().toUpperCase()) ||
+				post.name.toUpperCase().trim().includes(searchText.trim().toUpperCase())
+			)
+		})
+	}, [data, searchText])
 
 	return (
 		<section className="max-w-7xl mx-auto">
@@ -49,12 +60,16 @@ const HomePage = () => {
 					<h3>Loading...</h3>
 				) : isError ? (
 					<h3>Something Wrong...</h3>
-				) : (
+				) : data.length ? (
 					<div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
-						{data.map((post: Post) => (
-							<Card key={post.id} {...post} />
-						))}
+						{imageFilter.length ? (
+							imageFilter.map((post: Post) => <Card key={post.id} {...post} />)
+						) : (
+							<h3>No Search Results Found</h3>
+						)}
 					</div>
+				) : (
+					<h3>No Posts Yet</h3>
 				)}
 			</div>
 		</section>

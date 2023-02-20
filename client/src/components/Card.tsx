@@ -9,7 +9,7 @@ interface CardProps {
 }
 
 const Card = ({ id, name, prompt, image }: CardProps) => {
-	const downloadRef = useRef<HTMLDivElement>(null)
+	const downloadRef = useRef<HTMLAnchorElement>(null)
 	const handleDownload = () => {
 		if (downloadRef) {
 			downloadRef.current?.click()

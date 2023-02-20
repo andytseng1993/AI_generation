@@ -26,4 +26,4 @@ Then `npx prisma init`
 
 ```
 
-- Fix: `const downloadRef = useRef<HTMLDivElement>(null)`
+- Fix: `const downloadRef = useRef<HTMLAnchorElement>(null)`
