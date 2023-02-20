@@ -21,7 +21,13 @@ router.get('/', async (req, res) => {
         image: true
       }
     })
-    return res.status(200).json(posts)
+    const _post = posts.map((post) => {
+      return {
+        ...post,
+        image: post.image.toString('base64')
+      }
+    })
+    return res.status(200).json(_post)
   } catch (error) {
     return res.status(404).json({ error })
   }

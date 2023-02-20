@@ -5,7 +5,8 @@ import PhotoSize from '../components/PhotoSize'
 import Prompts from '../constant/Prompts'
 import axios from 'axios'
 import { motion } from 'framer-motion'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 
 interface imageData {
 	prompt: string
@@ -23,6 +24,8 @@ const CreateImagePage = () => {
 	const [photo, setPhoto] = useState('')
 	const [size, setSize] = useState('256x256')
 	const [warning, setWarning] = useState(false)
+	const queryClient = useQueryClient()
+	const navigate = useNavigate()
 
 	const mutation = useMutation({
 		mutationFn: async (imageData: imageData) => {
@@ -30,7 +33,7 @@ const CreateImagePage = () => {
 			return data
 		},
 		onSuccess: (data) => {
-			setPhoto(`data:image/jpeg;base64,${data.photo}`)
+			setPhoto(`data:image/png;base64,${data.photo}`)
 		},
 	})
 
@@ -39,8 +42,9 @@ const CreateImagePage = () => {
 			const { data } = await axios.post('/api/posts', formData)
 			return data
 		},
-		onSuccess: (data) => {
-			// setPhoto(`data:image/jpeg;base64,${data.photo}`)
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['posts'] })
+			navigate('/')
 		},
 	})
 
