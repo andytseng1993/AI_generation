@@ -15,12 +15,6 @@ const NavBar = () => {
 					>
 						Create Image
 					</Link>
-					<Link
-						to={'/create-text'}
-						className="font-inter font-medium bg-[#6469ff] text-white px-4 py-2 ml-3 rounded-md"
-					>
-						Create Text
-					</Link>
 				</div>
 			</header>
 			<main className="sm:p-6 px-4 py-8 w-full bg-[#f9fafe] min-h-[calc(100vh-73px)]">

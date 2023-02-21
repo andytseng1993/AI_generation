@@ -17,7 +17,7 @@ const Card = ({ id, name, prompt, image }: CardProps) => {
 	}
 
 	return (
-		<div className="rounded-xl group relative shadow-sm hover:shadow-lg card">
+		<div className="rounded-xl group relative shadow-sm hover:shadow-lg card ">
 			<img
 				src={`data:image/png;base64,${image}`}
 				className="w-full h-auto object-cover rounded-xl"

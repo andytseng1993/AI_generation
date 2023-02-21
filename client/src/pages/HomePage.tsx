@@ -61,7 +61,7 @@ const HomePage = () => {
 				) : isError ? (
 					<h3>Something Wrong...</h3>
 				) : data.length ? (
-					<div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
+					<div className="grid lg:grid-cols-5 sm:grid-cols-4 xs:grid-cols-3 grid-cols-1 gap-3">
 						{imageFilter.length ? (
 							imageFilter.map((post: Post) => <Card key={post.id} {...post} />)
 						) : (
